@@ -16,18 +16,13 @@ def sanitize_identifier(name):
 
 print('Necesitamos el nombre de la tabla y de la columna para escribir el código SQL')
 
-column_name = input('Ingrese el nombre de la columna: ')
-table_name = input('Ingrese el nombre de la tabla: ')
-schema_name = input('Ingrese el schema (default: public): ') or 'public'
+column_name = sanitize_identifier(input('Ingrese el nombre de la columna: '))
+table_name = sanitize_identifier(input('Ingrese el nombre de la tabla: '))
+schema_name = sanitize_identifier(input('Ingrese el schema (default: public): ') or 'public')
 
 column_name_sql = quote_sql_identifier(column_name)
 table_name_sql = quote_sql_identifier(table_name)
 schema_name_sql = quote_sql_identifier(schema_name)
-
-# versiones seguras para usar en nombres de función/trigger
-safe_column = sanitize_identifier(column_name)
-safe_table = sanitize_identifier(table_name)
-safe_schema = sanitize_identifier(schema_name)
 
 print()
 
@@ -49,7 +44,7 @@ allow_service_role_code = """
 # chequeamos  DISTINCT FROM para no frenar los noop updates
 
 sql = f"""
-create or replace function prevent_{safe_schema}_{safe_column}_update_on_{safe_table}()
+create or replace function prevent_{schema_name}_{column_name}_update_on_{table_name}()
 returns trigger
 language plpgsql
 as $$
@@ -64,10 +59,10 @@ begin
 end;
 $$;
 
-create trigger trg_prevent_{safe_schema}_{safe_column}_update_on_{safe_table}
+create trigger trg_prevent_{schema_name}_{column_name}_update_on_{table_name}
 before update on {schema_name_sql}.{table_name_sql}
 for each row
-execute function prevent_{safe_schema}_{safe_column}_update_on_{safe_table}();
+execute function prevent_{schema_name}_{column_name}_update_on_{table_name}();
 """
 
 
