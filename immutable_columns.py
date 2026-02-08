@@ -16,9 +16,27 @@ def sanitize_identifier(name):
 
 print('Necesitamos el nombre de la tabla y de la columna para escribir el código SQL')
 
-column_name = sanitize_identifier(input('Ingrese el nombre de la columna: '))
-table_name = sanitize_identifier(input('Ingrese el nombre de la tabla: '))
-schema_name = sanitize_identifier(input('Ingrese el schema (default: public): ') or 'public')
+
+raw_column_name = input('Ingrese el nombre de la columna: ')
+
+# si el usuario puso algo como tabla.columna, ya tenemos ambos raw names, no preguntar
+# por tabla (y asumir schema public) 
+# y si el usuario puso sch.tabla.col entonces mismo pero sacar de acá el raw_schema_name tambien
+
+parts = raw_column_name.split('.')
+
+if len(parts) == 3:
+    schema_name = sanitize_identifier(parts[0])
+    table_name = sanitize_identifier(parts[1])
+    column_name = sanitize_identifier(parts[2])
+elif len(parts) == 2:
+    schema_name = sanitize_identifier('public')
+    table_name = sanitize_identifier(parts[0])
+    column_name = sanitize_identifier(parts[1])
+else:
+    column_name = sanitize_identifier(raw_column_name)
+    table_name = sanitize_identifier(input('Ingrese el nombre de la tabla: '))
+    schema_name = sanitize_identifier(input('Ingrese el schema (default: public): ') or 'public')
 
 column_name_sql = quote_sql_identifier(column_name)
 table_name_sql = quote_sql_identifier(table_name)
