@@ -7,21 +7,16 @@ print('Necesitamos el nombre de la tabla y de la columna para escribir el códig
 column_name = input('Ingrese el nombre de la columna: ')
 table_name = input('Ingrese el nombre de la tabla: ')
 schema_name = input('Ingrese el schema (default: public)') or 'public'
+
 #si tienen mayusculas vamos a usar las comillas
-if table_name.lower() != table_name:
-    table_name_sql = '"'+table_name+'"'
-else:
-    table_name_sql = table_name
+def quote_sql_identifier(name):
+    if name.lower() != name:
+        return '"' + name + '"'
+    return name
 
-if column_name.lower() != column_name:
-    column_name_sql = '"'+column_name+'"'
-else:
-    column_name_sql = column_name
-
-if schema_name.lower() != schema_name:
-    schema_name_sql = '"'+schema_name+'"'
-else:
-    schema_name_sql = schema_name
+table_name_sql = quote_sql_identifier(table_name)
+column_name_sql = quote_sql_identifier(column_name)
+schema_name_sql = quote_sql_identifier(schema_name)
 
 print()
 
