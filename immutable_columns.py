@@ -1,6 +1,12 @@
 # esto genera un código SQL que garantiza que un (o multiples columnas) sean inmutables.
 # Aclaración, fijate que la columna tenga valor por defecto o que es creada correctamente con su valor, ya que no se podrá modificar más
 
+#si tienen mayusculas vamos a usar las comillas
+def quote_sql_identifier(name):
+    if name.lower() != name:
+        return '"' + name + '"'
+    return name
+
 
 print('Necesitamos el nombre de la tabla y de la columna para escribir el código SQL')
 
@@ -8,14 +14,8 @@ column_name = input('Ingrese el nombre de la columna: ')
 table_name = input('Ingrese el nombre de la tabla: ')
 schema_name = input('Ingrese el schema (default: public)') or 'public'
 
-#si tienen mayusculas vamos a usar las comillas
-def quote_sql_identifier(name):
-    if name.lower() != name:
-        return '"' + name + '"'
-    return name
-
-table_name_sql = quote_sql_identifier(table_name)
 column_name_sql = quote_sql_identifier(column_name)
+table_name_sql = quote_sql_identifier(table_name)
 schema_name_sql = quote_sql_identifier(schema_name)
 
 print()
@@ -43,15 +43,13 @@ returns trigger
 language plpgsql
 as $$
 begin
-
 {allow_service_role_code}
-
-  if new.{column_name_sql} IS DISTINCT FROM old.{column_name_sql} then  
-    raise exception using
-        errcode = '42501',
-        message = '{column_name_sql} is immutable';
-  end if;
-  return new;
+    if new.{column_name_sql} IS DISTINCT FROM old.{column_name_sql} then  
+        raise exception using
+            errcode = '42501',
+            message = '{column_name} is immutable';
+    end if;
+    return new;
 end;
 $$;
 
