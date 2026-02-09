@@ -22,4 +22,4 @@ english = {
     'done': 'SQL file written to {file_name}',
 }
 
-MSG = english
+MSG = spanish
