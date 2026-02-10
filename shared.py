@@ -1,4 +1,5 @@
 import re
+import os
 from localization import MSG
 
 #si tienen mayusculas vamos a usar las comillas
@@ -116,9 +117,8 @@ execute function prevent_{schema_name}_{column_name}_update_on_{table_name}();
 """
     return sql
 
-def write_sql_file(schema_name, column_name, table_name, sql):
+def write_sql_file(file_name, sql):
     """Escribe el archivo SQL y muestra el mensaje de éxito."""
-    file_name = f'no_modify_{schema_name}_{column_name}_on_{table_name}.sql'
     with open(file_name, 'w+') as f:
         f.write('begin;\n' + sql + '\ncommit;\n')
-    print(MSG['done'].format(file_name=file_name))
+    print(MSG['done'].format(file_name=os.path.abspath(file_name)))

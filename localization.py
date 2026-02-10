@@ -8,6 +8,14 @@ spanish = {
     'input_nullable': 'Permitir null? (y/N): ',
     'info_immutable': 'El Archivo SQL va a servir para que la columna {column_name} de la tabla {table_name} se vuelva inmutable',
     'done': 'Se ha escrito el archivo SQL en {file_name}',
+    'repl_intro': 'Vamos a generar un SQL que replique filas de una tabla source a una tabla target',
+    'repl_input_source': 'Ingrese la tabla source (ej: public.tabla o schema.tabla): ',
+    'repl_input_target': 'Ingrese la tabla target (ej: public.tabla o schema.tabla): ',
+    'repl_input_cols': 'Ingrese las columnas (separadas por coma, ej: id,name): ',
+    'repl_input_target_cols': 'Ingrese las columnas target (separadas por coma): ',
+    'repl_input_source_cols': 'Ingrese las columnas source (separadas por coma): ',
+    'repl_error_cols_mismatch': 'Error: la cantidad de columnas source ({source}) y target ({target}) no coinciden.',
+    'repl_info': 'El SQL va a replicar filas de {source} a {target} al hacer INSERT',
 }
 
 english = {
@@ -20,6 +28,14 @@ english = {
     'input_nullable': 'Allow null? (y/N): ',
     'info_immutable': 'The SQL file will make the column {column_name} on table {table_name} immutable',
     'done': 'SQL file written to {file_name}',
+    'repl_intro': 'We will generate SQL to replicate rows from a source table to a target table',
+    'repl_input_source': 'Enter the source table (e.g.: public.table or schema.table): ',
+    'repl_input_target': 'Enter the target table (e.g.: public.table or schema.table): ',
+    'repl_input_cols': 'Enter the columns (comma-separated, e.g.: id,name): ',
+    'repl_input_target_cols': 'Enter the target columns (comma-separated): ',
+    'repl_input_source_cols': 'Enter the source columns (comma-separated): ',
+    'repl_error_cols_mismatch': 'Error: source ({source}) and target ({target}) column count do not match.',
+    'repl_info': 'The SQL will replicate rows from {source} to {target} on INSERT',
 }
 
 MSG = spanish

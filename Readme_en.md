@@ -101,6 +101,54 @@ python inmutable_column.py table.id --create-column uuid --default new --not-nul
 
 ---
 
+### `row_replication.py`
+
+Generates a SQL file that **replicates rows** from a source table to a target table on INSERT, using an `AFTER INSERT` trigger.
+
+```bash
+python row_replication.py [flags]
+```
+
+**Generates:** `repl_{source_schema}_{source_table}_to_{target_schema}_{target_table}.sql`
+
+### Flags
+
+| Flag | Description |
+|------|-------------|
+| `--source [schema.table]` | Source table (where the trigger fires) |
+| `--target [schema.table]` | Target table (where the row is inserted) |
+| `--cols [col1,col2,...]` | Columns (same in source and target) |
+| `--target-cols [col1,col2,...]` | Target columns (if different from source) |
+| `--source-cols [col1,col2,...]` | Source columns (if different from target) |
+| `--avoid-security-definer` | Don't use `security definer` on the function |
+
+If no flags are passed, everything is asked interactively.
+
+### Examples
+
+```bash
+# interactive
+python row_replication.py
+
+# same columns in both tables
+python row_replication.py --source public.orders --target public.orders_backup --cols id,name,total
+
+# different columns
+python row_replication.py --source public.users --target public.audit --target-cols user_id,user_name --source-cols id,name
+
+# without security definer
+python row_replication.py --source public.orders --target public.orders_backup --cols id --avoid-security-definer
+```
+
+### Generated SQL includes
+
+- `BEGIN;` / `COMMIT;` to wrap everything in a transaction
+- PL/pgSQL function with `security definer` (by default) that does `INSERT INTO target ... ON CONFLICT DO NOTHING`
+- `DROP TRIGGER IF EXISTS` so the file can be re-run without errors
+- `CREATE TRIGGER AFTER INSERT` on the source table
+
+---
+
 ## Dot notation
 
 When entering the column name you can use:

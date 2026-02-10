@@ -74,6 +74,7 @@ print(MSG['info_immutable'].format(column_name=column_name, table_name=table_nam
 
 sql += generate_immutable_trigger_sql(schema_name, table_name, column_name, allow_service)
 
-write_sql_file(schema_name, column_name, table_name, sql)
+file_name = f'no_modify_{schema_name}_{column_name}_on_{table_name}.sql'
+write_sql_file(file_name, sql)
 
 
